@@ -9,10 +9,10 @@ public class FileObject {
     private String name;
     private long size;
     private String humanSize;
-    private FileTime timeCreated;
+    private String timeCreated;
     private Type type;
 
-    public FileObject(String name, long size, FileTime timeCreated, Type type) {
+    public FileObject(String name, long size, String timeCreated, Type type) {
         this.name = name;
         this.size = size;
         this.humanSize = humanReadableByteCountBin(size);

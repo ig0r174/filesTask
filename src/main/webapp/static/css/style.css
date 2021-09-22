@@ -12,10 +12,16 @@ body {
     margin-right: auto;
 }
 
+.generated_time {
+    text-align: center;
+    margin: 20px 0;
+}
+
 .files_main {
     background: #ffffff;
     border-radius: 30px;
-    margin: 40px auto;
+    margin-left: auto;
+    margin-right: auto;
     padding: 30px 40px;
     box-shadow: 0 10px 56px -19px rgba(0, 0, 0, 0.15);
 }

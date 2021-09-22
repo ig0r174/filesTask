@@ -1,14 +1,17 @@
 <%@ page import="me.ulearn.DirectoryParser" %>
 <%@ page import="me.ulearn.FileObject" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <% DirectoryParser directory = (DirectoryParser) request.getAttribute("directory"); %>
 <html>
 <head>
-    <title>Title</title>
+    <title>FileExplorer</title>
     <link rel="stylesheet" href="static/css/style.css"/>
 </head>
 <body>
 <div class="container">
+    <div class="generated_time"><%=new SimpleDateFormat("dd-MM-yyyy, HH:mm:ss").format(new Date())%></div>
     <div class="files_main">
         <div class="title">
             <h1><%=directory.getPath()%></h1> <% if( directory.getParentPath() != null ){ %><span class="go_to_parent" onclick="window.location.href='/files?path=<%=directory.getParentPath()%>'">⇧</span><% } %>
