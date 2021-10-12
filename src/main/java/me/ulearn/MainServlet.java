@@ -12,9 +12,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-@WebServlet(urlPatterns = {"/"})
+//@WebServlet(urlPatterns = {"/"})
 public class MainServlet extends HttpServlet {
 
+    /*
     @Override
     public void init(ServletConfig config ) throws ServletException {
         super.init(config);
@@ -76,5 +77,5 @@ public class MainServlet extends HttpServlet {
     public void destroy() {
 
     }
-
+    */
 }
