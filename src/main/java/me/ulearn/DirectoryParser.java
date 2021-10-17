@@ -1,5 +1,7 @@
 package me.ulearn;
 
+import services.UserProfile;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,14 +18,22 @@ public class DirectoryParser {
     private String parentPath;
     private List<FileObject> contents;
 
-    public DirectoryParser(String path){
+    public DirectoryParser(String path, UserProfile userProfile){
         this.path = path;
         this.contents = readContents();
         this.parentPath = getParentPath();
     }
 
     public String getParentPath() {
-        return this.path == "/" ? null : new File(path).getAbsoluteFile().getParent();
+        return Objects.equals(this.path, "/") ? null : new File(path).getAbsoluteFile().getParent();
+    }
+
+    public String getParentPath(String homeDirectory) {
+        return Objects.equals(this.path, homeDirectory) ? null :
+                new File(path)
+                        .getAbsoluteFile()
+                        .getParent()
+                        .replace(homeDirectory.substring(0, homeDirectory.length() - 1), "");
     }
 
     private List<FileObject> readContents() {
@@ -71,5 +81,13 @@ public class DirectoryParser {
 
     public String getPath() {
         return path;
+    }
+
+    public String getPath(String homeDirectory) {
+        return path.replace(homeDirectory, "");
+    }
+
+    public String getTitle(String homeDirectory) {
+        return "Home Directory" + getPath(homeDirectory);
     }
 }

@@ -7,6 +7,7 @@
 <head>
     <title>FileExplorer – Sign Up</title>
     <link rel="stylesheet" href="static/css/style.css"/>
+    <script src="static/js/form.js"></script>
 </head>
 <body>
 <div class="container">
@@ -16,20 +17,20 @@
         </div>
         <div class="files_body">
             <div class="files_list">
-                <form method="POST">
+                <form action="/api/signup" method="POST" enctype="application/x-www-form-urlencoded">
                     <div class="label_input">
                         <label for="login_input">Your login</label>
-                        <input id="login_input" type="text" placeholder="Enter your login" class="input" />
+                        <input name="login" id="login_input" type="text" placeholder="Enter your login" class="input" />
                     </div>
 
                     <div class="label_input">
                         <label for="email_input">Your Email</label>
-                        <input id="email_input" type="text" placeholder="Enter your e-mail" class="input" />
+                        <input name="email" id="email_input" type="text" placeholder="Enter your e-mail" class="input" />
                     </div>
 
                     <div class="label_input">
                         <label for="password_input">Your password</label>
-                        <input id="password_input" type="password" placeholder="Enter your password" class="input" />
+                        <input name="pass" id="password_input" type="password" placeholder="Enter your password" class="input" />
                     </div>
 
                     <button type="submit" class="button_grey">Submit form</button>

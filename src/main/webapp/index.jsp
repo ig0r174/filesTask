@@ -4,6 +4,7 @@
 <%@ page import="java.util.Date" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <% DirectoryParser directory = (DirectoryParser) request.getAttribute("directory"); %>
+<% String homeDirectory = (String) request.getAttribute("homeDirectory"); %>
 <html>
 <head>
     <title>FileExplorer</title>
@@ -11,10 +12,26 @@
 </head>
 <body>
 <div class="container">
-    <div class="generated_time"><%=new SimpleDateFormat("dd-MM-yyyy, HH:mm:ss").format(new Date())%></div>
+    <div class="user_block">
+        <div class="avatar">
+            <img src="static/images/avatar.png" alt="" />
+        </div>
+        <div class="data">
+            <div class="data_block">
+                <div class="title">Your login</div>
+                <div class="value file_name"><%=(String) request.getAttribute("login") %></div>
+            </div>
+        </div>
+        <div class="exit_btn">
+            <img src="static/images/exit.png" alt="" />
+        </div>
+    </div>
     <div class="files_main">
         <div class="title">
-            <h1><%=directory.getPath()%></h1> <% if( directory.getParentPath() != null ){ %><span class="go_to_parent" onclick="window.location.href='/files?path=<%=directory.getParentPath()%>'">⇧</span><% } %>
+            <h1 data-path="<%=directory.getPath(homeDirectory)%>"><%=directory.getTitle(homeDirectory)%></h1>
+            <% if( directory.getParentPath(homeDirectory) != null ){ %>
+            <span class="go_to_parent" onclick="window.location.href='?path=<%=directory.getParentPath(homeDirectory)%>'">⇧</span>
+            <% } %>
         </div>
         <div class="files_body">
             <div class="files_list">
@@ -42,13 +59,22 @@
             </div>
         </div>
     </div>
+    <div class="generated_time"><%=new SimpleDateFormat("dd-MM-yyyy, HH:mm:ss").format(new Date())%></div>
 </div>
 <script>
     function openOrDownload(el, type){
-        let currentPath = document.querySelector(".title h1").innerHTML;
-        let fullPath = (currentPath === "/" ? "/" : currentPath + "/") + el.querySelector(".body .file_name").innerHTML;
-        window.location.href = "/files?path=" + fullPath + (type === 'File' ? "&download=true" : "");
+        let currentPath = document.querySelector(".title h1").dataset.path;
+        let fullPath = currentPath + "/" + el.querySelector(".body .file_name").innerHTML;
+        window.location.href = "?path=" + fullPath + (type === 'File' ? "&download=true" : "");
     }
+
+    document.querySelector(".exit_btn").addEventListener("click", async (e) => {
+        const response = await fetch("/api/exit", {
+            method: 'DELETE'
+        }).then((data) => {
+            window.location.href = "/login";
+        });
+    });
 </script>
 </body>
 </html>

@@ -10,21 +10,19 @@ import java.io.IOException;
 
 @WebServlet(name = "CoreServlet", value = "/CoreServlet", urlPatterns = {"/"})
 public class CoreServlet extends HttpServlet {
-    private final AccountService accountService;
 
-    public CoreServlet() {
-        this.accountService = new AccountService();
-    }
-
-    public CoreServlet(AccountService accountService) {
-        this.accountService = accountService;
-    }
+    private AccountService accountService = new AccountService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String sessionId = request.getSession().getId();
         UserProfile profile = accountService.getUserBySessionId(sessionId);
+        getServletContext().setAttribute("accountService", accountService);
+        //System.out.println(accountService);
+
+        //System.out.println(sessionId);
+        //System.out.println(profile);
 
         /*
         UserProfile userProfile = new UserProfile("admin");

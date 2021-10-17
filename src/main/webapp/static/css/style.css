@@ -17,13 +17,24 @@ body {
     margin: 20px 0;
 }
 
-.files_main, .user_form {
+.files_main, .user_form, .user_block {
     background: #ffffff;
     border-radius: 30px;
     margin-left: auto;
     margin-right: auto;
     padding: 30px 40px;
     box-shadow: 0 10px 56px -19px rgba(0, 0, 0, 0.15);
+}
+
+.user_block {
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.user_block .exit_btn img {
+    width: 18px;
+    height: 18px;
 }
 
 .files_main .title h1, .user_form .title h1 {
@@ -63,7 +74,7 @@ body {
     margin-bottom: 15px;
 }
 
-.files_list .file_block .icon {
+.files_list .file_block .icon, .user_block .avatar img, .user_block .exit_btn {
     width: 38px;
     height: 38px;
     border-radius: 14px;
@@ -73,7 +84,17 @@ body {
     background: rgba(0, 0, 0, .05);
 }
 
-.files_list .file_block .icon img {
+.user_block .avatar img {
+    background: transparent;
+}
+
+.user_block .exit_btn {
+    margin-right: 0;
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.files_list .file_block .icon img, .user_block .exit_btn img {
     width: 18px;
     height: 18px;
     position: relative;
@@ -91,7 +112,7 @@ body {
     width: calc(100% / 3);
 }
 
-.files_list .file_block .body .data_block .title {
+.files_list .file_block .body .data_block .title, .user_block .data_block .title {
     text-transform: uppercase;
     font-size: 10px;
     letter-spacing: 1px;

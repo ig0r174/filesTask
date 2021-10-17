@@ -17,11 +17,11 @@ public class AccountService {
     }
 
     public UserProfile getUserByLogin(String login) {
-        return loginToProfile.get(login);
+        return loginToProfile.getOrDefault(login, null);
     }
 
     public UserProfile getUserBySessionId(String sessionId) {
-        return sessionIdToProfile.get(sessionId);
+        return sessionIdToProfile.getOrDefault(sessionId, null);
     }
 
     public void addSession(String sessionId, UserProfile userProfile) {

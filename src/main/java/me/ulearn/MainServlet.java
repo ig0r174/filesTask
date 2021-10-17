@@ -35,7 +35,7 @@ public class MainServlet extends HttpServlet {
                     "directory",
                     new DirectoryParser(req.getParameter("path") == null ? "/" : req.getParameter("path"))
             );
-            getServletContext().getRequestDispatcher("/directory.jsp").forward(req, resp);
+            getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
 
         } else {
 
