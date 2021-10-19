@@ -17,34 +17,14 @@ import java.util.Objects;
 @WebServlet(name = "DirectoryServlet", value = "/DirectoryServlet", urlPatterns = {"/home"})
 public class DirectoryServlet extends HttpServlet {
 
-    private AccountService accountService;
-
-    private void SetService(HttpServletRequest request, HttpServletResponse response) {
-
-        try {
-            this.accountService = (AccountService) getServletContext().getAttribute("accountService");
-            if( this.accountService == null )
-                throw new IllegalStateException("Account");
-        } catch (Exception e) {
-            try {
-                response.sendRedirect("/");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        SetService(request, response);
-
-        UserProfile userProfile = accountService.getUserBySessionId(request.getSession().getId());
+        UserProfile userProfile = AccountService.getUserBySessionId(request.getSession().getId());
         String homeDirectory = userProfile.getFullPath();
         String filePath = request.getParameter("path") == null ? homeDirectory : homeDirectory + request.getParameter("path");
 
-        if( accountService.getUserBySessionId(request.getSession().getId()) == null ){
+        if( AccountService.getUserBySessionId(request.getSession().getId()) == null ){
             response.sendRedirect("/login");
         }
 
@@ -62,7 +42,7 @@ public class DirectoryServlet extends HttpServlet {
             request.setAttribute("login", userProfile.getLogin());
             request.setAttribute(
                     "directory",
-                    new DirectoryParser(filePath, accountService.getUserBySessionId(request.getSession().getId()))
+                    new DirectoryParser(filePath, AccountService.getUserBySessionId(request.getSession().getId()))
             );
 
             getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
@@ -106,8 +86,6 @@ public class DirectoryServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 
-        SetService(request, response);
-
         String[] uri = request.getRequestURI().split("/");
         String login = request.getParameter("login");
         String pass = request.getParameter("pass");
@@ -127,14 +105,14 @@ public class DirectoryServlet extends HttpServlet {
                     return;
                 }
 
-                UserProfile profile = accountService.getUserByLogin(login);
+                UserProfile profile = AccountService.getUserByLogin(login);
                 if (profile == null || !profile.getPass().equals(pass)) {
                     response.setContentType("text/html;charset=utf-8");
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
                 }
 
-                accountService.addSession(request.getSession().getId(), profile);
+                AccountService.addSession(request.getSession().getId(), profile);
 
             } else if(Objects.equals(uri[2], "signup")){
 
@@ -144,7 +122,7 @@ public class DirectoryServlet extends HttpServlet {
                     return;
                 }
 
-                if( accountService.getUserByLogin(login) != null ){
+                if( AccountService.getUserByLogin(login) != null ){
                     response.setContentType("text/html;charset=utf-8");
                     response.setStatus(HttpServletResponse.SC_NON_AUTHORITATIVE_INFORMATION);
                     return;
@@ -157,8 +135,8 @@ public class DirectoryServlet extends HttpServlet {
                 }
 
                 UserProfile profile = new UserProfile(login, pass, email);
-                accountService.addNewUser(profile);
-                accountService.addSession(request.getSession().getId(), profile);
+                AccountService.addNewUser(profile);
+                AccountService.addSession(request.getSession().getId(), profile);
 
             }
 

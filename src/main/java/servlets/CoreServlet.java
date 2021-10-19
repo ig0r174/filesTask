@@ -11,14 +11,11 @@ import java.io.IOException;
 @WebServlet(name = "CoreServlet", value = "/CoreServlet", urlPatterns = {"/"})
 public class CoreServlet extends HttpServlet {
 
-    private AccountService accountService = new AccountService();
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String sessionId = request.getSession().getId();
-        UserProfile profile = accountService.getUserBySessionId(sessionId);
-        getServletContext().setAttribute("accountService", accountService);
+        UserProfile profile = AccountService.getUserBySessionId(sessionId);
         //System.out.println(accountService);
 
         //System.out.println(sessionId);

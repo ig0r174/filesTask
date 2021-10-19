@@ -14,30 +14,10 @@ import services.MessagesService;
 @WebServlet(name = "LoginServlet", value = "/LoginServlet", urlPatterns = {"/login", "/signup", "/api"})
 public class AccountServlet extends HttpServlet {
 
-    private AccountService accountService;
-
-    private void SetService(HttpServletRequest request, HttpServletResponse response) {
-
-        try {
-            this.accountService = (AccountService) getServletContext().getAttribute("accountService");
-            if( this.accountService == null )
-                throw new IllegalStateException("Account");
-        } catch (Exception e) {
-            try {
-                response.sendRedirect("/");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        SetService(request, response);
-
-        if( accountService.getUserBySessionId(request.getSession().getId()) == null ){
+        if( AccountService.getUserBySessionId(request.getSession().getId()) == null ){
             if(Arrays.asList(new String[]{"/login", "/signup"}).contains(request.getRequestURI()))
                 getServletContext().getRequestDispatcher(request.getRequestURI() + ".jsp").forward(request, response);
             else
@@ -50,10 +30,6 @@ public class AccountServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
-        SetService(request, response);
-
         String[] uri = request.getRequestURI().split("/");
         String login = request.getParameter("login");
         String pass = request.getParameter("pass");
@@ -72,13 +48,13 @@ public class AccountServlet extends HttpServlet {
                     return;
                 }
 
-                UserProfile profile = accountService.getUserByLogin(login);
+                UserProfile profile = AccountService.getUserByLogin(login);
                 if (profile == null || !profile.getPass().equals(pass)) {
                     response.getWriter().println(new MessagesService("error", "User with that login was not found or password is incorrect"));
                     return;
                 }
 
-                accountService.addSession(request.getSession().getId(), profile);
+                AccountService.addSession(request.getSession().getId(), profile);
                 response.getWriter().println(new MessagesService("redirect", "/home"));
 
             } else if (Objects.equals(uri[2], "signup")) {
@@ -88,7 +64,7 @@ public class AccountServlet extends HttpServlet {
                     return;
                 }
 
-                if (accountService.getUserByLogin(login) != null) {
+                if (AccountService.getUserByLogin(login) != null) {
                     response.getWriter().println(new MessagesService("error", "User with this login is already registered"));
                     return;
                 }
@@ -99,8 +75,8 @@ public class AccountServlet extends HttpServlet {
                 }
 
                 UserProfile profile = new UserProfile(login, pass, email);
-                accountService.addNewUser(profile);
-                accountService.addSession(request.getSession().getId(), profile);
+                AccountService.addNewUser(profile);
+                AccountService.addSession(request.getSession().getId(), profile);
                 response.getWriter().println(new MessagesService("redirect", "/home"));
 
 
@@ -113,11 +89,11 @@ public class AccountServlet extends HttpServlet {
     public void doDelete(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
         String sessionId = request.getSession().getId();
-        UserProfile profile = accountService.getUserBySessionId(sessionId);
+        UserProfile profile = AccountService.getUserBySessionId(sessionId);
         if (profile == null) {
             response.getWriter().println(new MessagesService("error", "You are not logged in"));
         } else {
-            accountService.deleteSession(sessionId);
+            AccountService.deleteSession(sessionId);
             response.getWriter().println(new MessagesService("redirect", "/login"));
         }
 
