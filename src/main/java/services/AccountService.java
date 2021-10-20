@@ -1,5 +1,7 @@
 package services;
 
+import database.DBService;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
