@@ -18,13 +18,6 @@ public class UserProfile {
         this.homeDirectory = login;
     }
 
-    public UserProfile(String login) {
-        this.login = login;
-        this.pass = login;
-        this.email = login;
-        this.homeDirectory = login;
-    }
-
     public String getLogin() {
         return login;
     }

@@ -22,7 +22,7 @@ public class DBService {
         configuration.addAnnotatedClass(UsersDataSet.class);
 
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-        configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
+        configuration.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
         configuration.setProperty("hibernate.connection.url", "jdbc:mysql://190.115.18.159:3306/jdbc");
         configuration.setProperty("hibernate.connection.username", "monty");
         configuration.setProperty("hibernate.connection.password", "D7r7B2l8");

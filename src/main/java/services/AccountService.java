@@ -1,6 +1,8 @@
 package services;
 
 import database.DBService;
+import database.UsersDAO;
+import database.UsersDataSet;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,51 +10,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AccountService {
-    private static final Map<String, UserProfile> loginToProfile;
     private static final Map<String, UserProfile> sessionIdToProfile;
     private static final DBService dbService;
+    private static final UsersDAO usersDao;
 
     static {
-        loginToProfile = new HashMap<>();
         sessionIdToProfile = new HashMap<>();
         dbService = new DBService();
-        initializeDBService();
-    }
-
-    private static void initializeDBService() {
-        try{
-            ResultSet rs = dbService.getStatement().executeQuery("SELECT `Login`, `Pass`, `Email` FROM `Users`");
-            while (rs.next()){
-
-                loginToProfile.put(
-                        rs.getString(1),
-                        new UserProfile(rs.getString(1), rs.getString(2), rs.getString(3))
-                );
-                String login = rs.getString(1);
-                System.out.println("Login: " + login);
-
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void createNewUser(String login, String email, String pass){
-        try{
-            String sql = String.format("INSERT INTO `Users` (`Login`, `Email`, `Pass`) values ('%s', '%s', '%s');", login, email, pass);
-            dbService.getStatement().executeUpdate(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        usersDao = new UsersDAO();
     }
 
     public static void addNewUser(UserProfile userProfile) {
-        createNewUser(userProfile.getLogin(), userProfile.getEmail(), userProfile.getPass());
-        loginToProfile.put(userProfile.getLogin(), userProfile);
+        usersDao.addUser(userProfile.getLogin(), userProfile.getPass(), userProfile.getEmail());
     }
 
     public static UserProfile getUserByLogin(String login) {
-        return loginToProfile.getOrDefault(login, null);
+        UsersDataSet userData = usersDao.getUserByLogin(login);
+        return userData == null ? null : new UserProfile(userData.getLogin(), userData.getPass(), userData.getEmail());
     }
 
     public static UserProfile getUserBySessionId(String sessionId) {

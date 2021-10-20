@@ -79,7 +79,6 @@ public class AccountServlet extends HttpServlet {
                 AccountService.addSession(request.getSession().getId(), profile);
                 response.getWriter().println(new MessagesService("redirect", "/home"));
 
-
             }
 
         } else response.getWriter().println(new MessagesService("error", "You have sent an unknown request"));
