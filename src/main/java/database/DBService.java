@@ -1,6 +1,8 @@
 package database;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
@@ -39,8 +41,32 @@ public class DBService {
         return configuration.buildSessionFactory(serviceRegistry);
     }
 
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
+    public UsersDataSet getUserByLogin(String login) {
+        Session session = sessionFactory.openSession();
+        UsersDAO dao = new UsersDAO(session);
+        long userId = dao.getUserId(login);
+        UsersDataSet dataSet = dao.get(userId);
+        session.close();
+        return dataSet;
+    }
+
+    public long addUser(String login, String pass, String email) {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+
+        try {
+            tx = session.beginTransaction();
+            long userId = (new UsersDAO(session)).insertUser(login, pass, email);
+            tx.commit();
+            return userId;
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return 0;
     }
 
 }

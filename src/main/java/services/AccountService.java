@@ -12,20 +12,18 @@ import java.util.Map;
 public class AccountService {
     private static final Map<String, UserProfile> sessionIdToProfile;
     private static final DBService dbService;
-    private static final UsersDAO usersDao;
 
     static {
         sessionIdToProfile = new HashMap<>();
         dbService = new DBService();
-        usersDao = new UsersDAO();
     }
 
     public static void addNewUser(UserProfile userProfile) {
-        usersDao.addUser(userProfile.getLogin(), userProfile.getPass(), userProfile.getEmail());
+        dbService.addUser(userProfile.getLogin(), userProfile.getPass(), userProfile.getEmail());
     }
 
     public static UserProfile getUserByLogin(String login) {
-        UsersDataSet userData = usersDao.getUserByLogin(login);
+        UsersDataSet userData = dbService.getUserByLogin(login);
         return userData == null ? null : new UserProfile(userData.getLogin(), userData.getPass(), userData.getEmail());
     }
 
